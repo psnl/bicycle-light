@@ -57,6 +57,14 @@ $(function(){
 				gattCharacteristic.writeValue(buffer);
 			});
 		});
+		$("#btnAngle").click(() => {
+			log('Clicked random');
+			bluetoothCharacteristic.then(gattCharacteristic=>{
+				var buffer = new Uint8Array(1);
+				buffer[0] = 4;
+				gattCharacteristic.writeValue(buffer);
+			});
+		});
 
 		$("#btnConnect").click(() => {
 		  let options = {filters: []};
@@ -91,7 +99,9 @@ $(function(){
 			document.getElementById("btnAuto").disabled = false;
 			document.getElementById("btnRandom").disabled = false;
 			document.getElementById("btnCircle").disabled = false;
-			document.getElementById("btnFlash").disabled = false;		  });
+			document.getElementById("btnFlash").disabled = false;
+			document.getElementById("btnAngle").disabled = false;
+		  });
 		}
 
 		function onDisconnectButtonClick() {
@@ -115,6 +125,7 @@ $(function(){
 			document.getElementById("btnRandom").disabled = true;
 			document.getElementById("btnCircle").disabled = true;
 			document.getElementById("btnFlash").disabled = true;
+			document.getElementById("btnAngle").disabled = true;
 		}
 
 
