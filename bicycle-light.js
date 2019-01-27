@@ -23,6 +23,12 @@ $(function(){
 						document.getElementById("btnRandom").disabled = false;
 						document.getElementById("btnCircle").disabled = false;
 						document.getElementById("btnFlash").disabled = false;
+						
+						gattService.getCharacteristic("77ac075c-6d31-4391-a44b-6e4611690c0b").then(gattCharacteristic=>{
+						gattCharacteristic.startNotifications().then(gattCharacteristic=>{
+						gattCharacteristic.addEventListener("characteristicvaluechanged", event=>{
+						var value = event.target.value.getUint8(0);
+						$("#notifiedValue").text("" + value);
 					});
 				});
 			});
