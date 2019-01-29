@@ -40,31 +40,31 @@
 <body>
 	<p>Bicycle Light</p>
 	<div>
+    <input type="radio" id="choiceMinimum" name="modeSelect" value=1>
+    <label for="choiceMinimum">Minimum</label><br>
+	
+    <input type="radio" id="contactRing" name="modeSelect" value=2>
+    <label for="contactRing">Ring</label><br>
+	
+    <input type="radio" id="contactFlash" name="modeSelect" value=3>
+    <label for="contactFlash">Flash</label><br>
+	
+    <input type="radio" id="contactCircle" name="modeSelect" value=4>
+    <label for="contactCircle">Circle</label><br>
+	
+    <input type="radio" id="contactRandom" name="modeSelect" value=5>
+    <label for="contactRandom">Random</label><br>
+	
+    <input type="radio" id="contactPulse" name="modeSelect" value=6>
+    <label for="contactPulse">Pulse</label><br>
+	</div>
+	<br>
+	<div>
 		<input type="button" value="Connect" id="btnConnect"></input> 
 	</div>
 	<br>
 	<div>
-		<button id="btnAuto" disabled=true>Auto</button>
-	</div>
-	<br>
-	<div>
-		<button id="btnFlash" disabled=true>Flash</button>
-	</div>
-	<br>
-	<div>
-		<button id="btnCircle" disabled=true>Circle</button>
-	</div>
-	<br>
-	<div>
-		<button id="btnRandom" disabled=true>Random</button>
-	</div>
-	<br>
-	<div>
-		<button id="btnAngle" disabled=true>Angle</button>
-	</div>
-	
-	<div>
-	<p>Battery Voltage: <span id="notifiedValue"></span>mV</p>
+	<p>Battery Voltage: <span id="notifiedValue">----</span>mV</p>
 	</div>
 	
 	<h3>Live Output</h3>
