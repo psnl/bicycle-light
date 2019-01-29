@@ -10,66 +10,29 @@ $(function(){
 		],
 		optionalServices: ["25d17b83-8767-4e0d-9c62-0153fb6eae4d"]
 		};
-		/*
-		$("#btnConnect").click(() => {
-			console.log("Running BLE Code");
-			navigator.bluetooth.requestDevice(requestDeviceParms).then(device => {
-				device.gatt.connect().then(gattServer=>{
-					gattServer.getPrimaryService("25d17b83-8767-4e0d-9c62-0153fb6eae4d").then(gattService=>{
-						gatt = gattService.getCharacteristic("5f70cc2a-89e0-44aa-81ee-ce837a837b87");
-						document.getElementById("btnConnect").value="Connected";
-						document.getElementById("btnConnect").disabled = true;
-						document.getElementById("btnAuto").disabled = false;
-						document.getElementById("btnRandom").disabled = false;
-						document.getElementById("btnCircle").disabled = false;
-						document.getElementById("btnFlash").disabled = false;
-						
-						gattService.getCharacteristic("77ac075c-6d31-4391-a44b-6e4611690c0b").then(gattCharacteristic=>{
-						gattCharacteristic.startNotifications().then(gattCharacteristic=>{
-						gattCharacteristic.addEventListener("characteristicvaluechanged", event=>{
-						var value = event.target.value.getUint8(0);
-						$("#notifiedValue").text("" + value);
-					});
-				});
-			});
+
+		$("#choiceMinimum").click(() => {
+			write(document.getElementById("choiceMinimum").value);
 		});
-		*/
-		$("#btnAuto").click(() => {
-			bluetoothCharacteristic.then(gattCharacteristic=>{
-				var buffer = new Uint8Array(1);
-				buffer[0] = 0;
-				gattCharacteristic.writeValue(buffer);
-			});
+
+		$("#contactRing").click(() => {
+			write(document.getElementById("contactRing").value);
 		});
-		$("#btnFlash").click(() => {
-			bluetoothCharacteristic.then(gattCharacteristic=>{
-				var buffer = new Uint8Array(1);
-				buffer[0] = 1;
-				gattCharacteristic.writeValue(buffer);
-			});
+
+		$("#contactFlash").click(() => {
+			write(document.getElementById("contactFlash").value);
 		});
-		$("#btnCircle").click(() => {
-			bluetoothCharacteristic.then(gattCharacteristic=>{
-				var buffer = new Uint8Array(1);
-				buffer[0] = 2;
-				gattCharacteristic.writeValue(buffer);
-			});
+
+		$("#contactCircle").click(() => {
+			write(document.getElementById("contactCircle").value);
 		});
-		$("#btnRandom").click(() => {
-			log('Clicked random');
-			bluetoothCharacteristic.then(gattCharacteristic=>{
-				var buffer = new Uint8Array(1);
-				buffer[0] = 3;
-				gattCharacteristic.writeValue(buffer);
-			});
+
+		$("#contactRandom").click(() => {
+			write(document.getElementById("contactRandom").value);
 		});
-		$("#btnAngle").click(() => {
-			log('Clicked random');
-			bluetoothCharacteristic.then(gattCharacteristic=>{
-				var buffer = new Uint8Array(1);
-				buffer[0] = 4;
-				gattCharacteristic.writeValue(buffer);
-			});
+
+		$("#contactPulse").click(() => {
+			write(document.getElementById("contactPulse").value);
 		});
 
 		$("#btnConnect").click(() => {
@@ -91,22 +54,46 @@ $(function(){
 		  });
 		});
 		
+		function write(value) {
+			var buffer = new Uint8Array(1);
+			buffer[0] = value;
+			bluetoothCharacteristic.writeValue(buffer);
+		}
+		
 		function connect() {
 		  log('Connecting to Bluetooth Device...');
 		  return bluetoothDevice.gatt.connect()
 		  .then(server => {
 			log('> Bluetooth Device connected');
 			server.getPrimaryService("25d17b83-8767-4e0d-9c62-0153fb6eae4d").then(gattService=>{
-				gatt = gattService.getCharacteristic("5f70cc2a-89e0-44aa-81ee-ce837a837b87");
-				bluetoothCharacteristic = gatt;
+				gattService.getCharacteristic("5f70cc2a-89e0-44aa-81ee-ce837a837b87").then(gattCharacteristic=>{
+					bluetoothCharacteristic = gattCharacteristic;
+					gattCharacteristic.readValue().then(value1 => {
+						var value = value1.getUint8(0);
+						var elements = document.getElementsByName("modeSelect");
+						for (var i = 0, l = elements.length; i < l; i++)
+						{
+							if (elements[i].value == value)
+							{
+								elements[i].checked = true;
+								break;
+							}
+						}
+					});
+				});
+				
+				gattService.getCharacteristic("77ac075c-6d31-4391-a44b-6e4611690c0b").then(gattCharacteristic=>{
+					gattCharacteristic.startNotifications().then(gattCharacteristic=>{
+						gattCharacteristic.addEventListener("characteristicvaluechanged", event=>{
+							var value = event.target.value.getUint16(0, true);
+							$("#notifiedValue").text("" + value);
+						});
+					});
+				});
+
 			});
 			document.getElementById("btnConnect").value="Connected";
 			document.getElementById("btnConnect").disabled = true;
-			document.getElementById("btnAuto").disabled = false;
-			document.getElementById("btnRandom").disabled = false;
-			document.getElementById("btnCircle").disabled = false;
-			document.getElementById("btnFlash").disabled = false;
-			document.getElementById("btnAngle").disabled = false;
 		  });
 		}
 
@@ -127,11 +114,6 @@ $(function(){
 			log('> Bluetooth Device disconnected');
 			document.getElementById("btnConnect").value="Connect";
 			document.getElementById("btnConnect").disabled = false;
-			document.getElementById("btnAuto").disabled = true;
-			document.getElementById("btnRandom").disabled = true;
-			document.getElementById("btnCircle").disabled = true;
-			document.getElementById("btnFlash").disabled = true;
-			document.getElementById("btnAngle").disabled = true;
 		}
 
 
@@ -148,31 +130,4 @@ $(function(){
 			log('Argh! ' + error);
 		  });
 		}		
-		/*
-		$("#test2").click(() => {
-			console.log("Running BLE Code");
-			navigator.bluetooth.requestDevice(requestDeviceParms).then(device => {
-				device.gatt.connect().then(gattServer=>{
-					gattServer.getPrimaryService("25d17b83-8767-4e0d-9c62-0153fb6eae4d").then(gattService=>{
-						gattService.getCharacteristic("77ac075c-6d31-4391-a44b-6e4611690c0b").then(gattCharacteristic=>{
-							gattCharacteristic.startNotifications().then(gattCharacteristic=>{
-								gattCharacteristic.addEventListener("characteristicvaluechanged", event=>{
-									var value = event.target.value.getUint8(0);
-									$("#notifiedValue").text("" + value);
-								});
-							});
-						});
-					});
-				});
-			});
-		});
-		*/
 	});
-					
-					
-					
-					
-					
-					
-					
-					
